@@ -34,7 +34,11 @@ import java.util.List;
 
 public class MovieFragment extends Fragment {
 
-    ImageAdapter mImageAdapter;
+    private ImageAdapter mImageAdapter;
+    private ArrayList<MovieData> mMovieData;
+
+    // Set the key of mImageAdapter for saving bundle
+    //public final static String
 
     // Set the key for Pracelable implementation
     public  final static String PAR_KEY = "com.masakorelab.objectPass.par";
@@ -52,10 +56,14 @@ public class MovieFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        mImageAdapter = new ImageAdapter(getActivity(), new ArrayList<MovieData>());
+        if (savedInstanceState != null) {
+            mMovieData = savedInstanceState.getParcelableArrayList(PAR_KEY);
+            mImageAdapter = new ImageAdapter(getActivity(), mMovieData);
+        } else {
+            mImageAdapter = new ImageAdapter(getActivity(), new ArrayList<MovieData>());
+        }
 
         GridView gridView = (GridView) rootView.findViewById(R.id.gridview_movie_poster);
         gridView.setAdapter(mImageAdapter);
@@ -70,8 +78,13 @@ public class MovieFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
         return rootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(PAR_KEY, mMovieData);
+        super.onSaveInstanceState(outState);
     }
 
     private void updateMovieData() {
@@ -84,12 +97,16 @@ public class MovieFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        updateMovieData();
+        if (mMovieData.isEmpty()) {
+            updateMovieData();
+        }
+        if (SettingsActivity.PREFERENCE_CHANGED) {
+            updateMovieData();
+        }
     }
 
     public class ImageAdapter extends ArrayAdapter<MovieData> {
         private Context mContext;
-        private List<MovieData> mMovieData;
 
         public ImageAdapter(Context context, ArrayList<MovieData> movieData) {
             super(context, 0, movieData);
@@ -175,7 +192,7 @@ public class MovieFragment extends Fragment {
                     movieData.setRelease_date("");
                 }
 
-                if (results.getString(MOVIE_POSTER_BASE_URL) != null) {
+                if (results.getString(MOVIE_POSTER_PATH) != null) {
                     //Setting movie poster path to MovieData Object
                     movieData.setMovie_poster_path(MOVIE_POSTER_BASE_URL + MOVIE_POSTER_SIZE +
                             results.getString(MOVIE_POSTER_PATH));
@@ -216,7 +233,7 @@ public class MovieFragment extends Fragment {
             /*
             * Please Obtain API KEY from https://www.themoviedb.org/documentation/api
             */
-            String api_key = "409a18458e8fb71e7569779b711c38f9";
+            String api_key = "";
 
             try {
                 // Construct the URL for the themoviedb query

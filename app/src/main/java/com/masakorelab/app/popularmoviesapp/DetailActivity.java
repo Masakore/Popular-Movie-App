@@ -90,7 +90,7 @@ public class DetailActivity extends ActionBarActivity {
                 textView_vote_average.setText(mMovieData.getVote_average() + "/10");
 
                 TextView textView_plot_synopsis =(TextView) rootView.findViewById(R.id.detail_plot_synopsis);
-                textView_plot_synopsis.setText(mMovieData.getSynopisis());
+                textView_plot_synopsis.setText(mMovieData.getSynopsis());
 
             }
             return rootView;

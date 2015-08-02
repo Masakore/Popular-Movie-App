@@ -1,5 +1,6 @@
 package com.masakorelab.app.popularmoviesapp;
 
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -12,7 +13,15 @@ public class MovieData implements Parcelable{
     private String release_date;
     private String movie_poster_path;
     private String vote_average;
-    private String synopisis;
+    private String synopsis;
+
+    // parcel keys
+    private static final String KEY_TITLE = "title";
+    private static final String KEY_RELEASE_DATE = "release_date";
+    private static final String KEY_POSTER_PATH = "poster_path";
+    private static final String KEY_VOTE_AVERAGE = "vote_average";
+    private static final String KEY_SYNOPSIS = "sysnopsis";
+
 
     //Setter
     public void setTitle(String title) {
@@ -31,8 +40,8 @@ public class MovieData implements Parcelable{
         this.vote_average = vote_average;
     }
 
-    public void setSynopisis(String synopisis) {
-        this.synopisis = synopisis;
+    public void setSynopisis(String synopsis) {
+        this.synopsis = synopsis;
     }
 
     // getter
@@ -50,8 +59,8 @@ public class MovieData implements Parcelable{
 
     public String getVote_average() { return vote_average; }
 
-    public String getSynopisis() {
-        return synopisis;
+    public String getSynopsis() {
+        return synopsis;
     }
 
     // Parcel Part
@@ -60,12 +69,14 @@ public class MovieData implements Parcelable{
 
         @Override
         public MovieData createFromParcel(Parcel source) {
+            Bundle bundle = source.readBundle();
+
             MovieData mMovieData = new MovieData();
-            mMovieData.title = source.readString();
-            mMovieData.release_date = source.readString();
-            mMovieData.movie_poster_path = source.readString();
-            mMovieData.vote_average = source.readString();
-            mMovieData.synopisis = source.readString();
+            mMovieData.title = bundle.getString(KEY_TITLE);
+            mMovieData.release_date = bundle.getString(KEY_RELEASE_DATE);
+            mMovieData.movie_poster_path = bundle.getString(KEY_POSTER_PATH);
+            mMovieData.vote_average = bundle.getString(KEY_VOTE_AVERAGE);
+            mMovieData.synopsis = bundle.getString(KEY_SYNOPSIS);
 
             return mMovieData;
         }
@@ -83,10 +94,15 @@ public class MovieData implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(title);
-        dest.writeString(release_date);
-        dest.writeString(movie_poster_path);
-        dest.writeString(vote_average);
-        dest.writeString(synopisis);
+        // create a bundle for the key value pairs
+        Bundle bundle = new Bundle();
+
+        bundle.putString(KEY_TITLE, title);
+        bundle.putString(KEY_RELEASE_DATE, release_date);
+        bundle.putString(KEY_POSTER_PATH, movie_poster_path);
+        bundle.putString(KEY_VOTE_AVERAGE, vote_average);
+        bundle.putString(KEY_SYNOPSIS, synopsis);
+
+        dest.writeBundle(bundle);
     }
 }
