@@ -122,7 +122,6 @@ public class MovieFragment extends Fragment {
             ImageView imageView;
             if (convertView == null) {
                 imageView = new ImageView(mContext);
-                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             } else {
                 imageView = (ImageView) convertView;
             }
@@ -192,7 +191,7 @@ public class MovieFragment extends Fragment {
             /*
             * Please Obtain API KEY from https://www.themoviedb.org/documentation/api
             */
-            String api_key = "";
+            String api_key = "409a18458e8fb71e7569779b711c38f9";
 
             try {
                 // Construct the URL for the themoviedb query
