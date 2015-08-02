@@ -160,15 +160,40 @@ public class MovieFragment extends Fragment {
 
             for(int i =0; i < movieArray.length(); i++) {
                 JSONObject results = movieArray.getJSONObject(i);
-                //results.getJSONArray(ID);
                 MovieData movieData = new MovieData();
-                movieData.setTitle(results.getString(TITLE));
-                movieData.setRelease_date(results.getString(RELEASE_DATE));
-                //Setting movie poster path to MovieData Object
-                movieData.setMovie_poster_path(MOVIE_POSTER_BASE_URL + MOVIE_POSTER_SIZE +
-                        results.getString(MOVIE_POSTER_PATH));
-                movieData.setVote_average(results.getString(VOTE_AVERAGE));
-                movieData.setSynopisis(results.getString(SYNOPISIS));
+
+                //Null Check before setting
+                if (results.getString(TITLE) != null) {
+                    movieData.setTitle(results.getString(TITLE));
+                } else {
+                    movieData.setTitle("");
+                }
+
+                if (results.getString(RELEASE_DATE) != null) {
+                    movieData.setRelease_date(results.getString(RELEASE_DATE));
+                } else {
+                    movieData.setRelease_date("");
+                }
+
+                if (results.getString(MOVIE_POSTER_BASE_URL) != null) {
+                    //Setting movie poster path to MovieData Object
+                    movieData.setMovie_poster_path(MOVIE_POSTER_BASE_URL + MOVIE_POSTER_SIZE +
+                            results.getString(MOVIE_POSTER_PATH));
+                } else {
+                    movieData.setMovie_poster_path("");
+                }
+
+                if (results.getString(VOTE_AVERAGE) != null) {
+                    movieData.setVote_average(results.getString(VOTE_AVERAGE));
+                } else {
+                    movieData.setVote_average("");
+                }
+
+                if (results.getString(SYNOPISIS) != null) {
+                    movieData.setSynopisis(results.getString(SYNOPISIS));
+                } else {
+                    movieData.setSynopisis("");
+                }
 
                 movieDatas.add(movieData);
             }
