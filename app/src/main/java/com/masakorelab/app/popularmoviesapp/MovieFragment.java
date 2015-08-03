@@ -180,37 +180,13 @@ public class MovieFragment extends Fragment {
                 MovieData movieData = new MovieData();
 
                 //Null Check before setting
-                if (results.getString(TITLE) != null) {
-                    movieData.setTitle(results.getString(TITLE));
-                } else {
-                    movieData.setTitle("");
-                }
-
-                if (results.getString(RELEASE_DATE) != null) {
-                    movieData.setRelease_date(results.getString(RELEASE_DATE));
-                } else {
-                    movieData.setRelease_date("");
-                }
-
-                if (results.getString(MOVIE_POSTER_PATH) != null) {
-                    //Setting movie poster path to MovieData Object
-                    movieData.setMovie_poster_path(MOVIE_POSTER_BASE_URL + MOVIE_POSTER_SIZE +
-                            results.getString(MOVIE_POSTER_PATH));
-                } else {
-                    movieData.setMovie_poster_path("");
-                }
-
-                if (results.getString(VOTE_AVERAGE) != null) {
-                    movieData.setVote_average(results.getString(VOTE_AVERAGE));
-                } else {
-                    movieData.setVote_average("");
-                }
-
-                if (results.getString(SYNOPISIS) != null) {
-                    movieData.setSynopisis(results.getString(SYNOPISIS));
-                } else {
-                    movieData.setSynopisis("");
-                }
+                movieData.setTitle(results.optString(TITLE, ""));
+                movieData.setRelease_date(results.optString(RELEASE_DATE, ""));
+                //Setting movie poster path to MovieData Object
+                movieData.setMovie_poster_path(MOVIE_POSTER_BASE_URL + MOVIE_POSTER_SIZE +
+                            results.optString(MOVIE_POSTER_PATH, ""));
+                movieData.setVote_average(results.optString(VOTE_AVERAGE, ""));
+                movieData.setSynopisis(results.optString(SYNOPISIS, ""));
 
                 movieDatas.add(movieData);
             }
@@ -233,7 +209,7 @@ public class MovieFragment extends Fragment {
             /*
             * Please Obtain API KEY from https://www.themoviedb.org/documentation/api
             */
-            String api_key = "";
+            String api_key = "409a18458e8fb71e7569779b711c38f9";
 
             try {
                 // Construct the URL for the themoviedb query
