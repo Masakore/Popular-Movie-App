@@ -3,7 +3,7 @@ package com.masakorelab.app.popularmoviesapp;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.supporv7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -47,6 +47,10 @@ public class DetailActivity extends ActionBarActivity {
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
+        }  else {
+            //Seems this one is not working as expected.
+            onBackPressed();
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
