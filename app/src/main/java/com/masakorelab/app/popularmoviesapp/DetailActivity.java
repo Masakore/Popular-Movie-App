@@ -3,7 +3,7 @@ package com.masakorelab.app.popularmoviesapp;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.supporv7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
