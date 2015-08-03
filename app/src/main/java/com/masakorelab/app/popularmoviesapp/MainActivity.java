@@ -8,6 +8,7 @@ import android.view.MenuItem;
 
 
 
+
 public class MainActivity extends ActionBarActivity {
 
     @Override
@@ -16,6 +17,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
             //Not sure why cannot resolve add() by using getSupportFragmentManager()
+            //Even though after importing android.support.v4.app.Fragment
             getFragmentManager().beginTransaction().add(R.id.container, new MovieFragment()).commit();
         }
     }
