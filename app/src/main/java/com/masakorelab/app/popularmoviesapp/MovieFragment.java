@@ -100,6 +100,9 @@ public class MovieFragment extends Fragment {
         if (mMovieData.isEmpty()) {
             updateMovieData();
         }
+
+        //Is this good practice to use static field for telling preference change?
+        //Is there any other option?
         if (SettingsActivity.PREFERENCE_CHANGED) {
             updateMovieData();
         }
@@ -209,7 +212,7 @@ public class MovieFragment extends Fragment {
             /*
             * Please Obtain API KEY from https://www.themoviedb.org/documentation/api
             */
-            String api_key = "409a18458e8fb71e7569779b711c38f9";
+            String api_key = "";
 
             try {
                 // Construct the URL for the themoviedb query
