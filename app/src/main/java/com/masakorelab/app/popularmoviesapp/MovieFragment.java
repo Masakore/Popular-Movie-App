@@ -38,10 +38,10 @@ public class MovieFragment extends Fragment {
     private ArrayList<MovieData> mMovieData;
 
     // Set the key of mImageAdapter for saving bundle
-    //public final static String
+
 
     // Set the key for Pracelable implementation
-    public  final static String PAR_KEY = "com.masakorelab.objectPass.par";
+    public final static String PAR_KEY = "com.masakorelab.objectPass.par";
 
     //Constructor
     public MovieFragment() {
@@ -167,7 +167,9 @@ public class MovieFragment extends Fragment {
             final String RELEASE_DATE = "release_date";
             final String MOVIE_POSTER_PATH = "poster_path";
             final String VOTE_AVERAGE = "vote_average";
-            final String SYNOPISIS = "overview";
+            final String SYNOPSIS = "overview";
+            final String VIDEOS = "videos";
+            final String REVIEWS = "reviews";
 
             //Formatting for Movie Poster Thumbnail
             final String MOVIE_POSTER_BASE_URL = "http://image.tmdb.org/t/p/";
@@ -183,18 +185,53 @@ public class MovieFragment extends Fragment {
                 MovieData movieData = new MovieData();
 
                 //Null Check before setting
+                movieData.setId(results.optString(ID, ""));
                 movieData.setTitle(results.optString(TITLE, ""));
                 movieData.setRelease_date(results.optString(RELEASE_DATE, ""));
                 //Setting movie poster path to MovieData Object
                 movieData.setMovie_poster_path(MOVIE_POSTER_BASE_URL + MOVIE_POSTER_SIZE +
                             results.optString(MOVIE_POSTER_PATH, ""));
                 movieData.setVote_average(results.optString(VOTE_AVERAGE, ""));
-                movieData.setSynopisis(results.optString(SYNOPISIS, ""));
+                movieData.setSynopsis(results.optString(SYNOPSIS, ""));
+                movieData.setVideos(results.optString(VIDEOS, ""));
+                movieData.setReviews(results.optString(REVIEWS, ""));
 
                 movieDatas.add(movieData);
             }
             return movieDatas;
         }
+
+        //After DB implementation, need to get videos and reviews
+
+//        private List<MovieData> getMovieVideoAndReviewsFromJson(String movieJsonStr) throws JSONException {
+//            final String RESULTS = "results";
+//            final String ID = "id";
+//            final String VIDEOS = "videos";
+//            final String REVIEWS = "reviews";
+//
+//            //Formatting for Movie Poster Thumbnail
+//            final String MOVIE_POSTER_BASE_URL = "http://image.tmdb.org/t/p/";
+//            final String MOVIE_POSTER_SIZE = "w185/";
+//
+//            JSONObject movieJson = new JSONObject(movieJsonStr);
+//            JSONArray movieArray = movieJson.getJSONArray(RESULTS);
+//
+//            List<MovieData> movieDatas = new ArrayList<MovieData>();
+//
+//            for(int i =0; i < movieArray.length(); i++) {
+//                JSONObject results = movieArray.getJSONObject(i);
+//                MovieData movieData = new MovieData();
+//
+//                //Null Check before setting
+//                movieData.setId(results.optString(ID, ""));
+//
+//                movieData.setVideos(results.optString(VIDEOS, ""));
+//                movieData.setReviews(results.optString(REVIEWS, ""));
+//
+//                movieDatas.add(movieData);
+//            }
+//            return movieDatas;
+//        }
 
         @Override
         protected List<MovieData> doInBackground(String... params) {
@@ -212,10 +249,10 @@ public class MovieFragment extends Fragment {
             /*
             * Please Obtain API KEY from https://www.themoviedb.org/documentation/api
             */
-            String api_key = "";
+            String api_key = "409a18458e8fb71e7569779b711c38f9";
 
             try {
-                // Construct the URL for the themoviedb query
+                // Construct the URL for the themoviedb discovery query
                 final String MOVIE_BASE_URL = "https://api.themoviedb.org/3/discover/movie?";
                 final String SORT_ORDER = "sort_by";
                 final String API_KEY = "api_key";
