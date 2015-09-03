@@ -19,9 +19,11 @@ public class MovieContract {
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIE).build();
 
         public static final String CONTENT_TYPE =
-                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_MOVIE   ;
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_MOVIE;
+
 
         public static final String TABLE_NAME = "movie";
+        public static final String COLUMN_MOVIE_ID = "movie_id";
         public static final String COLUMN_TITLE = "title";
         public static final String COLUMN_POSTER_PATH = "poster_path";
         public static final String COLUMN_RELEASE_DATE = "release_date";
@@ -29,6 +31,7 @@ public class MovieContract {
         public static final String COLUMN_PLOT_SYNOPSIS = "plot_synopsis";
         public static final String COLUMN_TRAILER_PATH = "trailer_path";
         public static final String COLUMN_USER_REVIEWS = "user_reviews";
+        public static final String COLUMN_POPULARITY = "popularity";
 
         public static Uri buildMovieUri(long id) {
             return ContentUris.withAppendedId(BASE_CONTENT_URI, id);

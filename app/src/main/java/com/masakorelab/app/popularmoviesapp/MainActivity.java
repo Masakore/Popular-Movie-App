@@ -11,6 +11,11 @@ import android.view.MenuItem;
 
 public class MainActivity extends ActionBarActivity {
 
+    private final String LOG_TAG = MainActivity.class.getSimpleName();
+    private final String MOVIEFRAGMENT_TAG = "MFTAG";
+
+    private String mSortOrder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,7 +23,8 @@ public class MainActivity extends ActionBarActivity {
         if (savedInstanceState == null) {
             //Not sure why cannot resolve add() by using getSupportFragmentManager()
             //Even though after importing android.support.v4.app.Fragment
-            getFragmentManager().beginTransaction().add(R.id.container, new MovieFragment()).commit();
+            getFragmentManager().beginTransaction().add(R.id.container, new MovieFragment(), MOVIEFRAGMENT_TAG).commit();
+            mSortOrder = Utility.getPreferredSortOrder(this);
         }
     }
 
@@ -43,5 +49,19 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String sortOrder = Utility.getPreferredSortOrder(this);
+
+        if (sortOrder != null && !sortOrder.equals(mSortOrder)) {
+            MovieFragment mf = (MovieFragment)getFragmentManager().findFragmentByTag(MOVIEFRAGMENT_TAG);
+            if (null != mf){
+                mf.onSortOrderChange();
+            }
+            mSortOrder = sortOrder;
+        }
     }
 }

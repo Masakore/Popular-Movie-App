@@ -63,6 +63,7 @@ public class MovieProvider extends ContentProvider {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
             }
         }
+        retCursor.setNotificationUri(getContext().getContentResolver(), uri);
         return retCursor;
     }
 
@@ -147,10 +148,10 @@ public class MovieProvider extends ContentProvider {
                             rowInserted++;
                         }
                     }
+                    db.setTransactionSuccessful();
                 } finally {
                     db.endTransaction();
                 }
-                db.setTransactionSuccessful();
                 getContext().getContentResolver().notifyChange(uri,null);
                 return rowInserted;
             default:

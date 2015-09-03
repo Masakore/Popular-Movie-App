@@ -1,8 +1,13 @@
 package com.masakorelab.app.popularmoviesapp;
 
 import android.app.Fragment;
+import android.app.LoaderManager;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Movie;
 import android.os.Bundle;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -16,6 +21,7 @@ import android.widget.ImageView;
 import android.support.v7.widget.ShareActionProvider;
 import android.widget.TextView;
 
+import com.masakorelab.app.popularmoviesapp.data.MovieContract;
 import com.squareup.picasso.Picasso;
 
 
@@ -63,44 +69,48 @@ public class DetailActivity extends ActionBarActivity {
      * A placeholder fragment containing a simple view.
      */
 
-    public static class DetailFragment extends Fragment {
+    public static class DetailFragment extends Fragment implements android.support.v4.app.LoaderManager.LoaderCallbacks<Cursor>{
 
         private static final String LOG_TAG = DetailFragment.class.getSimpleName();
+
+        private static final String MOVIE_SHARE_HASHTAG = "";
+
+        private ShareActionProvider mShareActionProvider;
         private MovieData mMovieData;
 
         public DetailFragment() {
             setHasOptionsMenu(true);
         }
 
+        private static final int DETAIL_LOADER = 0;
+
+        private static final String[] MOVIE_COLUMNS = {
+                MovieContract.MovieEntry.TABLE_NAME + "." + MovieContract.MovieEntry._ID,
+                MovieContract.MovieEntry.COLUMN_MOVIE_ID,
+                MovieContract.MovieEntry.COLUMN_TITLE,
+                MovieContract.MovieEntry.COLUMN_POSTER_PATH,
+                MovieContract.MovieEntry.COLUMN_RELEASE_DATE,
+                MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE,
+                MovieContract.MovieEntry.COLUMN_PLOT_SYNOPSIS,
+                MovieContract.MovieEntry.COLUMN_TRAILER_PATH,
+                MovieContract.MovieEntry.COLUMN_USER_REVIEWS
+        };
+
+        // these constants correspond to the projection defined above, and must change if the
+        // projection changes
+        private static final int COL_MOVIE_ID = 0;
+        private static final int COL_MOVIE_MID = 1;
+        private static final int COL_MOVIE_TITLE = 2;
+        private static final int COL_MOVIE_POSTER = 3;
+        private static final int COL_MOVIE_RELEASE = 4;
+        private static final int COL_MOVIE_VOTE = 5;
+        private static final int COL_MOVIE_PLOT = 6;
+        private static final int COL_MOVIE_TRAILER = 7;
+        private static final int COL_MOVIE_REVIEWS = 8;
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-            View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
-
-            // The detail Activity called via intent.  Inspect the intent for forecast data.
-            Intent intent = getActivity().getIntent();
-            if (intent != null && intent.hasExtra(MovieFragment.PAR_KEY)) {
-                //Get object by Parcelable Key
-                mMovieData = (MovieData)intent.getParcelableExtra(MovieFragment.PAR_KEY);
-
-                //Set View items
-                TextView textView_title =(TextView) rootView.findViewById(R.id.detail_title);
-                textView_title.setText(mMovieData.getTitle());
-
-                ImageView imageView_poster = (ImageView) rootView.findViewById(R.id.detail_poster);
-                Picasso.with(getActivity()).load(mMovieData.getMovie_poster_path()).into(imageView_poster);
-
-                TextView textView_release_date =(TextView) rootView.findViewById(R.id.detail_release_date);
-                textView_release_date.setText(mMovieData.getRelease_date());
-
-                TextView textView_vote_average =(TextView) rootView.findViewById(R.id.detail_vote_average);
-                textView_vote_average.setText(mMovieData.getVote_average() + "/10");
-
-                TextView textView_plot_synopsis =(TextView) rootView.findViewById(R.id.detail_plot_synopsis);
-                textView_plot_synopsis.setText(mMovieData.getSynopsis());
-
-            }
-            return rootView;
+            return inflater.inflate(R.layout.fragment_detail, container, false);
         }
 
         @Override
@@ -127,6 +137,57 @@ public class DetailActivity extends ActionBarActivity {
             //Please share the external youtube URL
             //shareIntent.putExtra(Intent.EXTRA_TEXT, );
             return shareIntent;
+        }
+
+        @Override
+        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            Log.v(LOG_TAG, "In onCreateLoader");
+            Intent intent = getActivity().getIntent();
+            if (intent == null) {
+                return null;
+            }
+
+            return new CursorLoader(
+                    getActivity(),
+                    intent.getData(),
+                    MOVIE_COLUMNS,
+                    null,
+                    null,
+                    null
+            );
+        }
+
+        @Override
+        public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+            Log.v(LOG_TAG, "In onLoadFinished");
+            if (!data.moveToFirst()) {
+                return;
+            }
+
+            // The detail Activity called via intent.  Inspect the intent for forecast data.
+                //Set View items
+                TextView textView_title =(TextView) getView().findViewById(R.id.detail_title);
+                textView_title.setText(data.getString(COL_MOVIE_TITLE));
+
+                ImageView imageView_poster = (ImageView) getView().findViewById(R.id.detail_poster);
+                Picasso.with(getActivity()).load(data.getString(COL_MOVIE_POSTER)).into(imageView_poster);
+
+                TextView textView_release_date =(TextView) getView().findViewById(R.id.detail_release_date);
+                textView_release_date.setText(data.getString(COL_MOVIE_RELEASE));
+
+                TextView textView_vote_average =(TextView) getView().findViewById(R.id.detail_vote_average);
+                textView_vote_average.setText(data.getDouble(COL_MOVIE_VOTE) + "/10");
+
+                TextView textView_plot_synopsis =(TextView) getView().findViewById(R.id.detail_plot_synopsis);
+                textView_plot_synopsis.setText(data.getString(COL_MOVIE_PLOT));
+
+
+
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Cursor> loader) {
+
         }
     }
 }

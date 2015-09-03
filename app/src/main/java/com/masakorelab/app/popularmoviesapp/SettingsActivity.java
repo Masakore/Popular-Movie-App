@@ -14,7 +14,6 @@ public class SettingsActivity extends PreferenceActivity
      * as a master/detail two-pane view on tablets. When true, a single pane is
      * shown on tablets.
      */
-    public static boolean PREFERENCE_CHANGED = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +62,6 @@ public class SettingsActivity extends PreferenceActivity
             // For other preferences, set the summary to the value's simple string representation.
             preference.setSummary(stringValue);
         }
-        PREFERENCE_CHANGED = true;
         return true;
     }
 }
