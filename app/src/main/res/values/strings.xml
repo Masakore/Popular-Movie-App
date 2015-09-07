@@ -37,5 +37,12 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_share">Share</string>
+    <string name="detail_trailers_text">Trailers</string>
+    <string name="detail_reviews_text">Reviews</string>
+    <string name="detail_mark_as_favorite">Mark As Favorite</string>
+
+    <!-- Value in SharedPreferences for movie id store -->
+    <string name="pref_idfile_key" translatable="false">com.masakorelab.movieid</string>
+    <string name="pref_idfile_filename">movie_id_list</string>
 
 </resources>

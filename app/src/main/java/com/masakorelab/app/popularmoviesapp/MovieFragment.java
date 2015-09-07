@@ -1,11 +1,10 @@
 package com.masakorelab.app.popularmoviesapp;
 
-import android.app.Fragment;
-import android.app.LoaderManager;
-import android.content.Context;
-import android.content.CursorLoader;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.content.Intent;
-import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -14,16 +13,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.GridView;
-import android.widget.ImageView;
 
 import com.masakorelab.app.popularmoviesapp.data.MovieContract;
-import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 
-public class MovieFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MovieFragment extends Fragment implements LoaderCallbacks<Cursor> {
 
     private static final int MOVIE_LOADER = 0;
     private MovieAdapter mMovieAdapter;
@@ -55,8 +50,11 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Cursor cursor = (Cursor) parent.getItemAtPosition(position);
+                int COL_MOVIE_ID = cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_MOVIE_ID);
+                String movie_ID = cursor.getString(COL_MOVIE_ID);
                 if (cursor != null) {
                     Intent intent = new Intent(getActivity(), DetailActivity.class)
+                            .putExtra(Intent.EXTRA_TEXT, movie_ID)
                             .setData(MovieContract.MovieEntry.CONTENT_URI);
                     startActivity(intent);
                 }
@@ -77,6 +75,11 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
     public void onActivityCreated(Bundle savedInstanceState) {
         getLoaderManager().initLoader(MOVIE_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
+    }
+
+    void onSortOrderChange() {
+        updateMovieData();
+        getLoaderManager().restartLoader(MOVIE_LOADER, null, this);
     }
 
     @Override
@@ -105,10 +108,5 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mMovieAdapter.swapCursor(null);
-    }
-
-    void onSortOrderChange() {
-        updateMovieData();
-        getLoaderManager().restartLoader(MOVIE_LOADER, null, this);
     }
 }

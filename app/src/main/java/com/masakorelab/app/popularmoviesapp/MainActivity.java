@@ -23,7 +23,7 @@ public class MainActivity extends ActionBarActivity {
         if (savedInstanceState == null) {
             //Not sure why cannot resolve add() by using getSupportFragmentManager()
             //Even though after importing android.support.v4.app.Fragment
-            getFragmentManager().beginTransaction().add(R.id.container, new MovieFragment(), MOVIEFRAGMENT_TAG).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.container, new MovieFragment(), MOVIEFRAGMENT_TAG).commit();
             mSortOrder = Utility.getPreferredSortOrder(this);
         }
     }
@@ -57,7 +57,7 @@ public class MainActivity extends ActionBarActivity {
         String sortOrder = Utility.getPreferredSortOrder(this);
 
         if (sortOrder != null && !sortOrder.equals(mSortOrder)) {
-            MovieFragment mf = (MovieFragment)getFragmentManager().findFragmentByTag(MOVIEFRAGMENT_TAG);
+            MovieFragment mf = (MovieFragment)getSupportFragmentManager().findFragmentByTag(MOVIEFRAGMENT_TAG);
             if (null != mf){
                 mf.onSortOrderChange();
             }
