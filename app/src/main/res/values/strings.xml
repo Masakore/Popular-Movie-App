@@ -28,11 +28,19 @@
     <!-- Label for by-highest-rated sort order option in sort order preference -->
     <string name="pref_label_sort_order_vote_average_desc">Highest Rated</string>
 
+    <!-- Label for favorited list option in sort order preference -->
+    <string name="pref_label_sort_order_favorite_list">Your Favorite</string>
+
     <!-- Value in SharedPreferences for by-popularity sort order option -->
     <string name="pref_sort_order_popularity_desc"  translatable="false">popularity.desc</string>
 
     <!-- Value in SharedPreferences for by-highest-rated sort order option -->
     <string name="pref_sort_order_vote_average_desc"  translatable="false">vote_average.desc</string>
+
+    <!-- Value in SharedPreferences for favorite list option -->
+    <string name="pref_sort_order_favorite_list"  translatable="false">favorite_list</string>
+
+
     <string name="title_activity_detail">DetailActivity</string>
 
     <string name="hello_world">Hello world!</string>
@@ -43,6 +51,7 @@
 
     <!-- Value in SharedPreferences for movie id store -->
     <string name="pref_idfile_key" translatable="false">com.masakorelab.movieid</string>
+
     <string name="pref_idfile_filename">movie_id_list</string>
 
 </resources>

@@ -245,8 +245,8 @@ public class DetailFragment extends Fragment implements LoaderCallbacks<Cursor>{
                 // SharedPref exist? -> Already the Movie ID added? ->
 
                 SharedPreferences sharedPref =
-                    getActivity().getSharedPreferences(getString(R.string.pref_idfile_key), getActivity().MODE_PRIVATE);
-                    Set<String> movieIdList = sharedPref.getStringSet(getString(R.string.pref_idfile_filename), null);
+                        getActivity().getSharedPreferences(getString(R.string.pref_idfile_key), getActivity().MODE_PRIVATE);
+                Set<String> movieIdList = sharedPref.getStringSet(getString(R.string.pref_idfile_filename), null);
                 SharedPreferences.Editor editor = sharedPref.edit();
                 Intent intent = getActivity().getIntent();
 
@@ -255,13 +255,17 @@ public class DetailFragment extends Fragment implements LoaderCallbacks<Cursor>{
                     set.add(intent.getStringExtra(Intent.EXTRA_TEXT));
                     editor.putStringSet(getString(R.string.pref_idfile_filename), set);
                     editor.commit();
+                }
+
+                if (movieIdList.contains(intent.getStringExtra(Intent.EXTRA_TEXT))) {
+                    Toast.makeText(getActivity(), "Already Exist!", Toast.LENGTH_SHORT).show();
+                    return;
                 } else {
-                    if (movieIdList.contains(intent.getStringExtra(Intent.EXTRA_TEXT))) {
-                        Toast.makeText(getActivity(), "Already Exist!", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                        movieIdList.add(intent.getStringExtra(Intent.EXTRA_TEXT));
-                        Toast.makeText(getActivity(), "Added!", Toast.LENGTH_SHORT).show();
+                    movieIdList.add(intent.getStringExtra(Intent.EXTRA_TEXT));
+                    editor.clear();
+                    editor.putStringSet(getString(R.string.pref_idfile_filename), movieIdList);
+                    editor.commit();
+                    Toast.makeText(getActivity(), "Added!", Toast.LENGTH_SHORT).show();
                 }
             }
         });

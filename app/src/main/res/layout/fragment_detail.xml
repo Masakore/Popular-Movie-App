@@ -14,10 +14,7 @@
             android:layout_height="wrap_content"
             android:background="#dc34efc5"
             android:textColor="#ffffffff"
-            android:textSize="50dp"
-            android:autoText="false"
-            android:paddingTop="40dp"
-            android:paddingLeft="10dp"
+            android:textSize="40sp"
             android:text="Not Found"/>
 
         <LinearLayout
@@ -50,7 +47,6 @@
                 <TextView android:id="@+id/detail_release_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="40dp"
                     android:textSize="30dp"
                     android:textColor="#ff000000"
                     android:layout_marginTop="10dp"
@@ -59,7 +55,6 @@
                 <TextView android:id="@+id/detail_vote_average"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="40dp"
                     android:textSize="20dp"
                     android:textColor="#ff000000"
                     android:text="Not Found"/>
@@ -76,29 +71,36 @@
         <TextView android:id="@+id/detail_plot_synopsis"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="20dp" />
+            android:layout_gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="Not Found"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="#ff000000"
             android:text="@string/detail_trailers_text"/>
 
         <ListView android:id="@+id/detail_trailers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:nestedScrollingEnabled="true"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="#ff000000"
             android:text="@string/detail_reviews_text"/>
 
         <ListView android:id="@+id/detail_reviews"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:nestedScrollingEnabled="true"/>
+            android:layout_gravity="center"
+            android:nestedScrollingEnabled="true" />
 
 </LinearLayout>
 </ScrollView>

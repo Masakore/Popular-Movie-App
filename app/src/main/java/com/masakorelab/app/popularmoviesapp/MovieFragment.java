@@ -9,13 +9,19 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.text.TextUtilsCompat;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.masakorelab.app.popularmoviesapp.data.MovieContract;
+
+import java.util.Collections;
+import java.util.Set;
 
 
 public class MovieFragment extends Fragment implements LoaderCallbacks<Cursor> {
@@ -85,18 +91,41 @@ public class MovieFragment extends Fragment implements LoaderCallbacks<Cursor> {
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String pref = Utility.getPreferredSortOrder(getActivity());
+        String select = null;
+        String[] selectArgs = null;
         String sort = null;
+
         if (pref.equals(getString(R.string.pref_sort_order_popularity_desc))) {
             sort = MovieContract.MovieEntry.COLUMN_POPULARITY + " DESC";
         } else if (pref.equals(getString(R.string.pref_sort_order_vote_average_desc))) {
             sort = MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE + " DESC";
+        } else if (pref.equals(getString(R.string.pref_sort_order_favorite_list))) {
+            SharedPreferences sharedPref =
+                    getActivity().getSharedPreferences(getString(R.string.pref_idfile_key), getActivity().MODE_PRIVATE);
+            Set<String> movieIdList = sharedPref.getStringSet(getString(R.string.pref_idfile_filename), null);
+
+            if (movieIdList == null || movieIdList.size() == 0) {
+                Toast.makeText(getActivity(), "No Favorite List Found", Toast.LENGTH_SHORT).show();
+                return null;
+            }
+
+            selectArgs = new String[movieIdList.size()];
+            int i = 0;
+            for (String movieId : movieIdList) {
+                selectArgs[i] = movieId;
+                i++;
+            }
+            select = MovieContract.MovieEntry.COLUMN_MOVIE_ID
+                    + " IN ( "
+                    + TextUtils.join(",", Collections.nCopies(movieIdList.size(),"?"))
+                    + " )" ;
         }
 
         return new CursorLoader(getActivity(),
                 MovieContract.MovieEntry.CONTENT_URI,
                 null,
-                null,
-                null,
+                select,
+                selectArgs,
                 sort);
     }
 
