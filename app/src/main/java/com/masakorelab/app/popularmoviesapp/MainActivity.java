@@ -12,20 +12,26 @@ import android.view.MenuItem;
 public class MainActivity extends ActionBarActivity {
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
-    private final String MOVIEFRAGMENT_TAG = "MFTAG";
+    private static final String DETAILFRAGMENT_TAG = "DFTAG";
 
+    private boolean mTwoPane;
     private String mSortOrder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (savedInstanceState == null) {
-            //Not sure why cannot resolve add() by using getSupportFragmentManager()
-            //Even though after importing android.support.v4.app.Fragment
-            getSupportFragmentManager().beginTransaction().add(R.id.container, new MovieFragment(), MOVIEFRAGMENT_TAG).commit();
-            mSortOrder = Utility.getPreferredSortOrder(this);
+        if (findViewById(R.id.fragment_movie) != null) {
+            mTwoPane = true;
+            if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.movie_detail_container, new DetailFragment(), DETAILFRAGMENT_TAG)
+                        .commit();
+            }
+        } else {
+            mTwoPane = false;
         }
+
     }
 
     @Override
@@ -57,7 +63,7 @@ public class MainActivity extends ActionBarActivity {
         String sortOrder = Utility.getPreferredSortOrder(this);
 
         if (sortOrder != null && !sortOrder.equals(mSortOrder)) {
-            MovieFragment mf = (MovieFragment)getSupportFragmentManager().findFragmentByTag(MOVIEFRAGMENT_TAG);
+            MovieFragment mf = (MovieFragment)getSupportFragmentManager().findFragmentById(R.id.gridview_movie);
             if (null != mf){
                 mf.onSortOrderChange();
             }

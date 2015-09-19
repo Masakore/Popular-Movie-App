@@ -32,7 +32,6 @@ import java.util.List;
 
 public class DetailActivity extends ActionBarActivity {
 
-    private final String DETAILFRAGMENT_TAG = "dft";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +39,7 @@ public class DetailActivity extends ActionBarActivity {
         setContentView(R.layout.activity_detail);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new DetailFragment(), DETAILFRAGMENT_TAG)
+                    .add(R.id.movie_detail_container, new DetailFragment())
                     .commit();
         }
     }
