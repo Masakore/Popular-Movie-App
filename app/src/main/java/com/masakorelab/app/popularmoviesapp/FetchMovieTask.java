@@ -150,7 +150,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
             /*
             * Please Obtain API KEY from https://www.themoviedb.org/documentation/api
             */
-            String api_key = "409a18458e8fb71e7569779b711c38f9";
+            String api_key = "";
 
             try {
                 // Construct the URL for the themoviedb discovery query
