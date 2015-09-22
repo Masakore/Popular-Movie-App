@@ -1,5 +1,6 @@
 package com.masakorelab.app.popularmoviesapp;
 
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
@@ -30,8 +31,10 @@ public class MovieFragment extends Fragment implements LoaderCallbacks<Cursor> {
     private MovieAdapter mMovieAdapter;
 
     //Constructor
-    public MovieFragment() {
+    public MovieFragment() {}
 
+    public interface CallBack {
+        public void onItemSelected(Uri dataUri, String movieId);
     }
 
     @Override
@@ -59,10 +62,11 @@ public class MovieFragment extends Fragment implements LoaderCallbacks<Cursor> {
                 int COL_MOVIE_ID = cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_MOVIE_ID);
                 String movie_ID = cursor.getString(COL_MOVIE_ID);
                 if (cursor != null) {
-                    Intent intent = new Intent(getActivity(), DetailActivity.class)
-                            .putExtra(Intent.EXTRA_TEXT, movie_ID)
-                            .setData(MovieContract.MovieEntry.CONTENT_URI);
-                    startActivity(intent);
+//                    Intent intent = new Intent(getActivity(), DetailActivity.class)
+//                            .putExtra(Intent.EXTRA_TEXT, movie_ID)
+//                            .setData(MovieContract.MovieEntry.CONTENT_URI);
+//                    startActivity(intent);
+                    ((CallBack) getActivity()).onItemSelected(MovieContract.MovieEntry.CONTENT_URI, movie_ID);
                 }
             }
         });

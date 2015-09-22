@@ -1,6 +1,7 @@
 package com.masakorelab.app.popularmoviesapp;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -9,7 +10,7 @@ import android.view.MenuItem;
 
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements MovieFragment.CallBack{
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
@@ -68,6 +69,26 @@ public class MainActivity extends ActionBarActivity {
                 mf.onSortOrderChange();
             }
             mSortOrder = sortOrder;
+        }
+    }
+
+    @Override
+    public void onItemSelected(Uri contentUri, String movieId) {
+        if (mTwoPane) {
+            Bundle args = new Bundle();
+            args.putParcelable(DetailFragment.DETAILFRAGMENT_URI, contentUri);
+            args.putString(DetailFragment.MOVIEID, movieId);
+
+            DetailFragment fragment = new DetailFragment();
+            fragment.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.movie_detail_container, fragment, DETAILFRAGMENT_TAG)
+                    .commit();
+        } else {
+            Intent intent = new Intent(this, DetailActivity.class)
+                    .setData(contentUri).putExtra(DetailFragment.MOVIEID, movieId);
+            startActivity(intent);
         }
     }
 }

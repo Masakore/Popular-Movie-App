@@ -58,12 +58,17 @@ import java.util.Set;
 public class DetailFragment extends Fragment implements LoaderCallbacks<Cursor>{
 
     private static final String LOG_TAG = DetailFragment.class.getSimpleName();
+    static final String DETAILFRAGMENT_URI = "DFURI";
+    static final String MOVIEID = "MOVIEID";
+
 
     //private static final String MOVIE_SHARE_HASHTAG;
     //private ShareActionProvider mShareActionProvider;
 
     private ArrayAdapter mTrailerAdapter;
     private ArrayAdapter mReviewAdapter;
+    private Uri mUri;
+    private String mMovieId;
 
     public DetailFragment() {
         setHasOptionsMenu(true);
@@ -94,11 +99,17 @@ public class DetailFragment extends Fragment implements LoaderCallbacks<Cursor>{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            mUri = arguments.getParcelable(DetailFragment.DETAILFRAGMENT_URI);
+            mMovieId = arguments.getString(DetailFragment.MOVIEID);
+        } else {
+            Intent intent = getActivity().getIntent();
+            mMovieId = intent.getStringExtra(Intent.EXTRA_TEXT);
+        }
 
-        Intent intent = getActivity().getIntent();
-        String movie_ID = intent.getStringExtra(Intent.EXTRA_TEXT);
-        onFetchIndMovie(getActivity(),movie_ID);
+        View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+        onFetchIndMovie(getActivity(),mMovieId);
 
         mTrailerAdapter = new TrailerAdapter(getActivity(), new ArrayList<Trailers>());
         mReviewAdapter = new ReviewAdapter(getActivity(), new ArrayList<Reviews>());
@@ -182,19 +193,17 @@ public class DetailFragment extends Fragment implements LoaderCallbacks<Cursor>{
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Log.v(LOG_TAG, "In onCreateLoader");
-        Intent intent = getActivity().getIntent();
-        if (intent == null || intent.getData() == null) {
-            return null;
+        if ( null != mUri) {
+            return new CursorLoader(
+                    getActivity(),
+                    mUri,
+                    MOVIE_COLUMNS,
+                    MovieContract.MovieEntry.COLUMN_MOVIE_ID + " =?",
+                    new String[]{mMovieId},
+                    null
+            );
         }
-
-        return new CursorLoader(
-           getActivity(),
-           intent.getData(),
-           MOVIE_COLUMNS,
-           MovieContract.MovieEntry.COLUMN_MOVIE_ID + " =?",
-           new String[]{intent.getStringExtra(Intent.EXTRA_TEXT)},
-           null
-        );
+        return null;
     }
 
     @Override
